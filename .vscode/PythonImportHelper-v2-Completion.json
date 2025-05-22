@@ -1,0 +1,452 @@
+[
+    {
+        "label": "pygame",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pygame",
+        "description": "pygame",
+        "detail": "pygame",
+        "documentation": {}
+    },
+    {
+        "label": "cv2",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "cv2",
+        "description": "cv2",
+        "detail": "cv2",
+        "documentation": {}
+    },
+    {
+        "label": "mediapipe",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "mediapipe",
+        "description": "mediapipe",
+        "detail": "mediapipe",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "math",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "math",
+        "description": "math",
+        "detail": "math",
+        "documentation": {}
+    },
+    {
+        "label": "random",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "random",
+        "description": "random",
+        "detail": "random",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "detect_gestures",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def detect_gestures():\n    global smoothed_x, open_palm, thumbs_up\n    ret, frame = cap.read()\n    if not ret:\n        return smoothed_x\n    frame = cv2.flip(frame, 1)\n    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)\n    res = hands.process(rgb)\n    open_palm = False\n    thumbs_up = False",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "get_background_color",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def get_background_color():\n    elapsed = time.time() - start_time\n    # cycle every 30 seconds\n    phase = (elapsed % 30) / 30\n    # day = light blue, night = dark blue\n    day = pygame.Color(135,206,235)\n    night = pygame.Color(25,25,112)\n    return day.lerp(night, abs(math.sin(math.pi * phase)))\n# Power-ups: coin collection and shield\ndef spawn_coin():",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "spawn_coin",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def spawn_coin():\n    if random.random() < 0.01:\n        x = random.choice([160,260,360,460,560])\n        coins.append(pygame.Rect(x, -30, 30, 30))\ndef move_coins():\n    global score, shield, shield_timer\n    for coin in coins[:]:\n        coin.y += speed\n        if coin.y > HEIGHT:\n            coins.remove(coin)",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "move_coins",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def move_coins():\n    global score, shield, shield_timer\n    for coin in coins[:]:\n        coin.y += speed\n        if coin.y > HEIGHT:\n            coins.remove(coin)\n        elif car_rect.colliderect(coin):\n            coins.remove(coin)\n            score += 5\n            shield = True",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "draw_coins",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def draw_coins():\n    for coin in coins:\n        win.blit(coin_img, (coin.x, coin.y))\n# Obstacles\ndef spawn_obstacle():\n    if random.random() < 0.02:\n        x = random.choice([160,260,360,460,560])\n        obstacles.append(pygame.Rect(x, -100, 60, 100))\ndef move_obstacles():\n    global score",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "spawn_obstacle",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def spawn_obstacle():\n    if random.random() < 0.02:\n        x = random.choice([160,260,360,460,560])\n        obstacles.append(pygame.Rect(x, -100, 60, 100))\ndef move_obstacles():\n    global score\n    for obs in obstacles[:]:\n        obs.y += speed\n        if obs.y > HEIGHT:\n            obstacles.remove(obs)",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "move_obstacles",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def move_obstacles():\n    global score\n    for obs in obstacles[:]:\n        obs.y += speed\n        if obs.y > HEIGHT:\n            obstacles.remove(obs)\n            score += 1\n# Collision\ndef detect_collision():\n    if shield: return False",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "detect_collision",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def detect_collision():\n    if shield: return False\n    for obs in obstacles:\n        if car_rect.colliderect(obs): return True\n    return False\n# Level progression: increase base_speed every score threshold\ndef progression():\n    global base_speed\n    if score > 50: base_speed = 12\n    elif score > 30: base_speed = 10",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "progression",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def progression():\n    global base_speed\n    if score > 50: base_speed = 12\n    elif score > 30: base_speed = 10\n    else: base_speed = 8\n# Input screens\ndef input_name():\n    global player_name\n    name = \"\"\n    while True:",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "input_name",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def input_name():\n    global player_name\n    name = \"\"\n    while True:\n        win.fill((0,0,0))\n        txt = font.render(\"Enter Name: \" + name + \"|\", True, (255,255,255))\n        win.blit(txt,(200,300))\n        pygame.display.update()\n        for e in pygame.event.get():\n            if e.type==pygame.QUIT: sys.exit()",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "select_level",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def select_level():\n    global level, speed\n    opts=[\"Easy\",\"Medium\",\"Hard\"]\n    idx=0\n    while True:\n        win.fill((0,0,0))\n        for i,o in enumerate(opts):\n            color=(255,255,0) if i==idx else (255,255,255)\n            txt=font.render(o,True,color)\n            win.blit(txt,(350,300+i*40))",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "main_loop",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def main_loop():\n    while True:\n        game_running = main()\n        if not game_running:\n            break\n# Modified main function to return when quitting\ndef main():\n    global speed, car_x, car_rect, shield, boost_timer\n    input_name()\n    select_level()",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def main():\n    global speed, car_x, car_rect, shield, boost_timer\n    input_name()\n    select_level()\n    engine_sound.play(-1)\n    running = True\n    tick = 0\n    boost_timer = pygame.time.get_ticks()  # ✅ INIT boost_timer properly\n    while running:\n        clock.tick(60)",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "game_over",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def game_over():\n    while True:\n        win.fill((0, 0, 0))\n        txt = font.render(f\"Game Over! Score: {score}\", True, (255, 255, 255))\n        win.blit(txt, (250, 300))\n        txt2 = font.render(\"R: Restart  Q: Quit\", True, (255, 255, 255))\n        win.blit(txt2, (270, 350))\n        pygame.display.update()\n        for e in pygame.event.get():\n            if e.type == pygame.QUIT:",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "reset_game",
+        "kind": 2,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "def reset_game():\n    global score, base_speed, speed, car_x, smoothed_x, open_palm, thumbs_up\n    global obstacles, coins, shield, shield_timer, boost_timer, start_time\n    score = 0\n    base_speed = 8\n    speed = base_speed\n    car_x = WIDTH // 2 - 30\n    smoothed_x = 0.5\n    open_palm = False\n    thumbs_up = False",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "win",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "win = pygame.display.set_mode((WIDTH, HEIGHT))\npygame.display.set_caption(\"Gesture Racing with Power-ups & Day-Night Cycle\")\nclock = pygame.time.Clock()\n# Load assets\ncar_img = pygame.transform.scale(pygame.image.load(\"car.png\"), (60, 120))\ncoin_img = pygame.transform.scale(pygame.image.load(\"coin.png\"), (30, 30))\nengine_sound = pygame.mixer.Sound(\"engine.mp3\")\ncrash_sound = pygame.mixer.Sound(\"crash.mp3\")\nboost_sound = pygame.mixer.Sound(\"boost.mp3\")\n# Fonts",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "clock",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "clock = pygame.time.Clock()\n# Load assets\ncar_img = pygame.transform.scale(pygame.image.load(\"car.png\"), (60, 120))\ncoin_img = pygame.transform.scale(pygame.image.load(\"coin.png\"), (30, 30))\nengine_sound = pygame.mixer.Sound(\"engine.mp3\")\ncrash_sound = pygame.mixer.Sound(\"crash.mp3\")\nboost_sound = pygame.mixer.Sound(\"boost.mp3\")\n# Fonts\nfont = pygame.font.SysFont(\"Arial\", 30)\n# -------------------- MediaPipe ------------------------",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "car_img",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "car_img = pygame.transform.scale(pygame.image.load(\"car.png\"), (60, 120))\ncoin_img = pygame.transform.scale(pygame.image.load(\"coin.png\"), (30, 30))\nengine_sound = pygame.mixer.Sound(\"engine.mp3\")\ncrash_sound = pygame.mixer.Sound(\"crash.mp3\")\nboost_sound = pygame.mixer.Sound(\"boost.mp3\")\n# Fonts\nfont = pygame.font.SysFont(\"Arial\", 30)\n# -------------------- MediaPipe ------------------------\nmp_hands = mp.solutions.hands\nhands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "coin_img",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "coin_img = pygame.transform.scale(pygame.image.load(\"coin.png\"), (30, 30))\nengine_sound = pygame.mixer.Sound(\"engine.mp3\")\ncrash_sound = pygame.mixer.Sound(\"crash.mp3\")\nboost_sound = pygame.mixer.Sound(\"boost.mp3\")\n# Fonts\nfont = pygame.font.SysFont(\"Arial\", 30)\n# -------------------- MediaPipe ------------------------\nmp_hands = mp.solutions.hands\nhands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,\n                       min_detection_confidence=0.7, min_tracking_confidence=0.7)",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "engine_sound",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "engine_sound = pygame.mixer.Sound(\"engine.mp3\")\ncrash_sound = pygame.mixer.Sound(\"crash.mp3\")\nboost_sound = pygame.mixer.Sound(\"boost.mp3\")\n# Fonts\nfont = pygame.font.SysFont(\"Arial\", 30)\n# -------------------- MediaPipe ------------------------\nmp_hands = mp.solutions.hands\nhands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,\n                       min_detection_confidence=0.7, min_tracking_confidence=0.7)\nmp_draw = mp.solutions.drawing_utils",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "crash_sound",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "crash_sound = pygame.mixer.Sound(\"crash.mp3\")\nboost_sound = pygame.mixer.Sound(\"boost.mp3\")\n# Fonts\nfont = pygame.font.SysFont(\"Arial\", 30)\n# -------------------- MediaPipe ------------------------\nmp_hands = mp.solutions.hands\nhands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,\n                       min_detection_confidence=0.7, min_tracking_confidence=0.7)\nmp_draw = mp.solutions.drawing_utils\ncap = cv2.VideoCapture(0)",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "boost_sound",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "boost_sound = pygame.mixer.Sound(\"boost.mp3\")\n# Fonts\nfont = pygame.font.SysFont(\"Arial\", 30)\n# -------------------- MediaPipe ------------------------\nmp_hands = mp.solutions.hands\nhands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,\n                       min_detection_confidence=0.7, min_tracking_confidence=0.7)\nmp_draw = mp.solutions.drawing_utils\ncap = cv2.VideoCapture(0)\ncap.set(3, 640)",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "font",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "font = pygame.font.SysFont(\"Arial\", 30)\n# -------------------- MediaPipe ------------------------\nmp_hands = mp.solutions.hands\nhands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,\n                       min_detection_confidence=0.7, min_tracking_confidence=0.7)\nmp_draw = mp.solutions.drawing_utils\ncap = cv2.VideoCapture(0)\ncap.set(3, 640)\ncap.set(4, 480)\n# -------------------- Game Variables ------------------------",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "mp_hands",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "mp_hands = mp.solutions.hands\nhands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,\n                       min_detection_confidence=0.7, min_tracking_confidence=0.7)\nmp_draw = mp.solutions.drawing_utils\ncap = cv2.VideoCapture(0)\ncap.set(3, 640)\ncap.set(4, 480)\n# -------------------- Game Variables ------------------------\nplayer_name = \"\"\nlevel = \"Easy\"",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "hands",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,\n                       min_detection_confidence=0.7, min_tracking_confidence=0.7)\nmp_draw = mp.solutions.drawing_utils\ncap = cv2.VideoCapture(0)\ncap.set(3, 640)\ncap.set(4, 480)\n# -------------------- Game Variables ------------------------\nplayer_name = \"\"\nlevel = \"Easy\"\nscore = 0",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "mp_draw",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "mp_draw = mp.solutions.drawing_utils\ncap = cv2.VideoCapture(0)\ncap.set(3, 640)\ncap.set(4, 480)\n# -------------------- Game Variables ------------------------\nplayer_name = \"\"\nlevel = \"Easy\"\nscore = 0\nbase_speed = 8\nspeed = base_speed",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "cap",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "cap = cv2.VideoCapture(0)\ncap.set(3, 640)\ncap.set(4, 480)\n# -------------------- Game Variables ------------------------\nplayer_name = \"\"\nlevel = \"Easy\"\nscore = 0\nbase_speed = 8\nspeed = base_speed\ncar_x = WIDTH//2 - 30",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "player_name",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "player_name = \"\"\nlevel = \"Easy\"\nscore = 0\nbase_speed = 8\nspeed = base_speed\ncar_x = WIDTH//2 - 30\ncar_y = HEIGHT - 150\nsmoothed_x = 0.5\nopen_palm = False\nthumbs_up = False",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "level",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "level = \"Easy\"\nscore = 0\nbase_speed = 8\nspeed = base_speed\ncar_x = WIDTH//2 - 30\ncar_y = HEIGHT - 150\nsmoothed_x = 0.5\nopen_palm = False\nthumbs_up = False\nobstacles = []",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "score",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "score = 0\nbase_speed = 8\nspeed = base_speed\ncar_x = WIDTH//2 - 30\ncar_y = HEIGHT - 150\nsmoothed_x = 0.5\nopen_palm = False\nthumbs_up = False\nobstacles = []\ncoins = []",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "base_speed",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "base_speed = 8\nspeed = base_speed\ncar_x = WIDTH//2 - 30\ncar_y = HEIGHT - 150\nsmoothed_x = 0.5\nopen_palm = False\nthumbs_up = False\nobstacles = []\ncoins = []\nshield = False",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "speed",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "speed = base_speed\ncar_x = WIDTH//2 - 30\ncar_y = HEIGHT - 150\nsmoothed_x = 0.5\nopen_palm = False\nthumbs_up = False\nobstacles = []\ncoins = []\nshield = False\nshield_timer = 0",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "car_x",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "car_x = WIDTH//2 - 30\ncar_y = HEIGHT - 150\nsmoothed_x = 0.5\nopen_palm = False\nthumbs_up = False\nobstacles = []\ncoins = []\nshield = False\nshield_timer = 0\nboost_timer = 0",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "car_y",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "car_y = HEIGHT - 150\nsmoothed_x = 0.5\nopen_palm = False\nthumbs_up = False\nobstacles = []\ncoins = []\nshield = False\nshield_timer = 0\nboost_timer = 0\nstart_time = time.time()",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "smoothed_x",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "smoothed_x = 0.5\nopen_palm = False\nthumbs_up = False\nobstacles = []\ncoins = []\nshield = False\nshield_timer = 0\nboost_timer = 0\nstart_time = time.time()\ndef detect_gestures():",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "open_palm",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "open_palm = False\nthumbs_up = False\nobstacles = []\ncoins = []\nshield = False\nshield_timer = 0\nboost_timer = 0\nstart_time = time.time()\ndef detect_gestures():\n    global smoothed_x, open_palm, thumbs_up",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "thumbs_up",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "thumbs_up = False\nobstacles = []\ncoins = []\nshield = False\nshield_timer = 0\nboost_timer = 0\nstart_time = time.time()\ndef detect_gestures():\n    global smoothed_x, open_palm, thumbs_up\n    ret, frame = cap.read()",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "obstacles",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "obstacles = []\ncoins = []\nshield = False\nshield_timer = 0\nboost_timer = 0\nstart_time = time.time()\ndef detect_gestures():\n    global smoothed_x, open_palm, thumbs_up\n    ret, frame = cap.read()\n    if not ret:",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "coins",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "coins = []\nshield = False\nshield_timer = 0\nboost_timer = 0\nstart_time = time.time()\ndef detect_gestures():\n    global smoothed_x, open_palm, thumbs_up\n    ret, frame = cap.read()\n    if not ret:\n        return smoothed_x",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "shield",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "shield = False\nshield_timer = 0\nboost_timer = 0\nstart_time = time.time()\ndef detect_gestures():\n    global smoothed_x, open_palm, thumbs_up\n    ret, frame = cap.read()\n    if not ret:\n        return smoothed_x\n    frame = cv2.flip(frame, 1)",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "shield_timer",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "shield_timer = 0\nboost_timer = 0\nstart_time = time.time()\ndef detect_gestures():\n    global smoothed_x, open_palm, thumbs_up\n    ret, frame = cap.read()\n    if not ret:\n        return smoothed_x\n    frame = cv2.flip(frame, 1)\n    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "boost_timer",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "boost_timer = 0\nstart_time = time.time()\ndef detect_gestures():\n    global smoothed_x, open_palm, thumbs_up\n    ret, frame = cap.read()\n    if not ret:\n        return smoothed_x\n    frame = cv2.flip(frame, 1)\n    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)\n    res = hands.process(rgb)",
+        "detail": "game",
+        "documentation": {}
+    },
+    {
+        "label": "start_time",
+        "kind": 5,
+        "importPath": "game",
+        "description": "game",
+        "peekOfCode": "start_time = time.time()\ndef detect_gestures():\n    global smoothed_x, open_palm, thumbs_up\n    ret, frame = cap.read()\n    if not ret:\n        return smoothed_x\n    frame = cv2.flip(frame, 1)\n    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)\n    res = hands.process(rgb)\n    open_palm = False",
+        "detail": "game",
+        "documentation": {}
+    }
+]
