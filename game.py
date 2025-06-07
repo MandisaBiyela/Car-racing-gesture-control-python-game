@@ -8,7 +8,7 @@ import time
 
 # -------------------- INIT ------------------------
 pygame.init()
-WIDTH, HEIGHT = 800, 700
+WIDTH, HEIGHT = 800, 750
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Gesture Racing with Power-ups & Day-Night Cycle")
 clock = pygame.time.Clock()
